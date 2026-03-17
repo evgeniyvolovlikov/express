@@ -2,6 +2,7 @@ import express from 'express'
 import type { Express } from 'express'
 import morgan from 'morgan'
 import { userRouter } from '@/routes/user.routes'
+import { tourRouter } from '@/routes/tour.routes'
 import { dotenvConfig } from './config/env'
 
 export class App {
@@ -23,5 +24,6 @@ export class App {
 
     private setupRoutes(): void {
         this.app.use('/api/v1/users', userRouter)
+		this.app.use('/api/v1/tours', tourRouter)
     }
 }

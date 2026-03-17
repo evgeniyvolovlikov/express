@@ -13,5 +13,8 @@ const getEnv = (key: string, defaultValue?: string): string => {
 export const dotenvConfig = {
     port: parseInt(getEnv('PORT', '3000'), 10),
     nodeEnv: getEnv('NODE_ENV', 'development'),
-    isDev: getEnv('NODE_ENV', 'development') === 'development'
+    isDev: getEnv('NODE_ENV', 'development') === 'development',
+	database: getEnv('DATABASE'),
+	databaseUser: getEnv('DATABASE_USER'),
+	databasePassword: getEnv('DATABASE_PASSWORD')	
 } as const

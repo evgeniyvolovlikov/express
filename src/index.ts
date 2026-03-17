@@ -1,3 +1,4 @@
+import { Database } from './database/database'
 import { dotenvConfig } from './config/env'
 import { App } from './app'
 import { localPort, protocols } from './constants/constants'
@@ -9,9 +10,11 @@ class Server extends App {
         super()
     }
 
-    public listen(port: number | string) {
+    public async listen(port: number | string) {
+		await Database.getInstance().connect();
+
         this.app.listen(port, () => {
-            console.log(`Настроен порт: ${protocols.http}://localhost:${port} `)
+            console.log(`✅ Настроен порт: ${protocols.http}://localhost:${port} `)
         })
     }
 }

@@ -1,9 +1,23 @@
 import { Router } from 'express'
-import { UserController } from '../controllers/user.controllers'
+import { UserController } from '@/controllers/user.controllers'
 
-const router = Router()
-const userController = new UserController()
+export class UserRouter {
+	public router = Router()
 
-router.route('/').get(userController.getAllUsers)
+	private userController = new UserController()
 
-export { router as userRouter }
+	constructor() {
+		this.initilizeRoutes()
+	}
+
+	private initilizeRoutes() {
+		this.router.route('/')
+			.get(this.userController.getAllUsers)
+			.post(this.userController.createUser)
+
+		this.router.route('/:id')
+			.get(this.userController.getUser)
+			.patch(this.userController.updateUser)
+			.delete(this.userController.deleteUser)
+	}
+}

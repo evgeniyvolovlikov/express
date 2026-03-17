@@ -1,9 +1,23 @@
 import { Router } from 'express'
 import { TourController } from '@/controllers/tour.controller'
 
-const router = Router()
-const tourController = new TourController()
+export class TourRouter {
+	public router = Router()
 
-router.route('/').get(tourController.getAllTours)
+	private tourController = new TourController()
 
-export { router as tourRouter }
+	constructor() {
+		this.initilizeRoutes()
+	}
+
+	private initilizeRoutes() {
+		this.router.route('/')
+			.get(this.tourController.getAllTours)
+			.post(this.tourController.createTour)
+
+		this.router.route('/:id')
+			.get(this.tourController.getTour)
+			.patch(this.tourController.updateTour)
+			.delete(this.tourController.deleteTour)
+	}
+}

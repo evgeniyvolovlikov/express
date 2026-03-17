@@ -1,4 +1,4 @@
 export interface Protocols {
-    http: string
-    https: string
+	http: string
+	https: string
 }

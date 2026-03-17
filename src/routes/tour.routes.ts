@@ -11,11 +11,13 @@ export class TourRouter {
 	}
 
 	private initilizeRoutes() {
-		this.router.route('/')
+		this.router
+			.route('/')
 			.get(this.tourController.getAllTours)
 			.post(this.tourController.createTour)
 
-		this.router.route('/:id')
+		this.router
+			.route('/:id')
 			.get(this.tourController.getTour)
 			.patch(this.tourController.updateTour)
 			.delete(this.tourController.deleteTour)

@@ -11,11 +11,13 @@ export class UserRouter {
 	}
 
 	private initilizeRoutes() {
-		this.router.route('/')
+		this.router
+			.route('/')
 			.get(this.userController.getAllUsers)
 			.post(this.userController.createUser)
 
-		this.router.route('/:id')
+		this.router
+			.route('/:id')
 			.get(this.userController.getUser)
 			.patch(this.userController.updateUser)
 			.delete(this.userController.deleteUser)

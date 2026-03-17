@@ -1,2 +1,2 @@
-pnpm format:check
-pnpm type:check
+npx lint-staged
+pnpm run type:check

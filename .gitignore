@@ -1,0 +1,15 @@
+# Пакеты
+node_modules
+
+# Операционная сеть
+.DS_Store
+
+# Сборка
+dist
+
+# Кеширование
+.cache/
+*.tsbuildinfo
+
+# Логирование
+pnpm-debug.log*

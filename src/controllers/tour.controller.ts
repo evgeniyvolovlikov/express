@@ -1,57 +1,106 @@
-import fs from 'fs'
-import type { Request, Response } from 'express'
-import tours from 'data/tours.simple.json'
+import type { Request, Response, NextFunction } from 'express'
+import { Tour } from '@/models/tour.model'
 
 export class TourController {
-	public getAllTours = (_req: Request, res: Response): void => {
-		res.status(200).json({
-			status: 'success',
-			results: tours.length,
-			data: tours
-		})
+	public aliasTopTours = (_req: Request, _res: Response, _next: NextFunction) => {}
+
+	public getAllTours = async (_req: Request, res: Response) => {
+		try {
+			const tours = await Tour.find()
+
+			res.status(200).json({
+				status: 'success',
+				results: tours.length,
+				data: {
+					tours
+				}
+			})
+		} catch (err) {
+			res.status(404).json({
+				status: 'fail',
+				message: err
+			})
+		}
 	}
 
-	public getTour = (req: Request, res: Response): void => {
-		console.log(req.params)
-		const id: number = +req.params.id
-		const tour = tours.find((el) => el.id === id)
+	public getTour = async (req: Request, res: Response) => {
+		try {
+			const id = req.params.id
+			const tour = await Tour.findById(id)
+			// Tour.findOne({ _id: req.params.id })
 
-		res.status(200).json({
-			status: 'success',
-			data: {
-				tour
-			}
-		})
+			res.status(200).json({
+				status: 'success',
+				data: {
+					tour
+				}
+			})
+		} catch (err) {
+			res.status(404).json({
+				status: 'fail',
+				message: err
+			})
+		}
 	}
 
-	public createTour = (req: Request, res: Response) => {
-		const newId = +tours[tours.length - 1].id + 1
-		const newTour = Object.assign({ id: newId }, req.body)
-		tours.push(newTour)
-
-		fs.writeFile(`data/tours.simple.json`, JSON.stringify(tours), () => {
+	public createTour = async (req: Request, res: Response) => {
+		try {
+			const newTour = await Tour.create(req.body)
 			res.status(201).json({
 				status: 'success',
 				data: {
 					tour: newTour
 				}
 			})
-		})
+		} catch (err) {
+			res.status(400).json({
+				status: 'fail',
+				message: err
+			})
+		}
 	}
 
-	public updateTour = (_req: Request, res: Response) => {
-		res.status(200).json({
-			status: 'success',
-			data: {
-				tour: '<Updated tour here...>'
-			}
-		})
+	public updateTour = async (req: Request, res: Response) => {
+		try {
+			const id = req.params.id
+			const tour = await Tour.findByIdAndUpdate(id, req.body, {
+				new: true,
+				runValidators: true
+			})
+
+			res.status(200).json({
+				status: 'success',
+				data: {
+					tour
+				}
+			})
+		} catch (err) {
+			res.status(404).json({
+				status: 'fail',
+				message: err
+			})
+		}
 	}
 
-	public deleteTour = (_req: Request, res: Response) => {
-		res.status(204).json({
-			status: 'success',
-			data: null
-		})
+	public deleteTour = async (req: Request, res: Response) => {
+		try {
+			const id = req.params.id
+			const tour = await Tour.findByIdAndDelete(id)
+
+			res.status(200).json({
+				status: 'success',
+				data: {
+					deletedTour: tour
+				}
+			})
+		} catch (err) {
+			res.status(404).json({
+				status: 'fail',
+				message: err
+			})
+		}
 	}
+
+	public getTourStats = () => {}
+	public getMonthlyPlan = () => {}
 }

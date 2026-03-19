@@ -13,3 +13,6 @@ dist
 
 # Логирование
 pnpm-debug.log*
+
+# Тесты
+coverage

@@ -7,7 +7,7 @@ enum Difficulty {
 	DIFFICULT = 'difficult'
 }
 
-interface ITourSchema extends Document {
+export interface ITourSchema extends Document {
 	name: string
 	slug?: string
 	duration: number
@@ -125,28 +125,8 @@ const tourSchema = new mongoose.Schema<ITourSchema>(
 	}
 )
 
-tourSchema.virtual('durationWeeks').get(function () {
-	return this.duration / 7
-})
-
 // DOCUMENT MIDDLEWARE: функция сработает перед .save() и .create()
 tourSchema.pre('save', function (this) {
 	this.slug = slugify(this.name, { lower: true })
 })
-
-// // // // QUERY MIDDLEWARE
-// tourSchema.pre(/^find/, function(this: mongoose.Query<any, any>, next) {
-//   this.where({ secretTour: { $ne: true } })
-
-//   (this as any).start = Date.now()
-
-//   next()
-// })
-
-// // // AGGREGATION MIDDLEWARE
-// tourSchema.pre('aggregate', function(next) {
-//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } })
-//   next();
-// })
-
 export const Tour = mongoose.model('Tour', tourSchema)

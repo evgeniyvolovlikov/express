@@ -1,12 +1,17 @@
-import type { Request, Response, NextFunction } from 'express'
+import type { Request, Response } from 'express'
 import { Tour } from '@/models/tour.model'
+import { APIFeatures } from '@/utils/api.features/api.features'
 
 export class TourController {
-	public aliasTopTours = (_req: Request, _res: Response, _next: NextFunction) => {}
-
-	public getAllTours = async (_req: Request, res: Response) => {
+	public getAllTours = async (req: Request, res: Response) => {
 		try {
-			const tours = await Tour.find()
+			const features = new APIFeatures(Tour.find(), req.query)
+				.filter()
+				.sort()
+				.limitFields()
+				.paginate()
+
+			const tours = await features.query
 
 			res.status(200).json({
 				status: 'success',
@@ -100,7 +105,4 @@ export class TourController {
 			})
 		}
 	}
-
-	public getTourStats = () => {}
-	public getMonthlyPlan = () => {}
 }

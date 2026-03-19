@@ -15,7 +15,8 @@
 		"format:staged": "prettier --write",
 		"format:check": "prettier . --check",
 		"type:check": "tsc --noEmit",
-		"prepare": "husky"
+		"prepare": "husky",
+		"unit:test": "jest"
 	},
 	"lint-staged": {
 		"*.{ts,js,json,md}": [
@@ -25,16 +26,25 @@
 	"dependencies": {
 		"dotenv": "^17.3.1",
 		"express": "^5.2.1",
-		"mongoose": "^9.3.0"
+		"mongoose": "^9.3.0",
+		"qs": "^6.15.0",
+		"slugify": "^1.6.8"
 	},
 	"devDependencies": {
 		"@types/express": "^5.0.6",
+		"@types/jest": "^30.0.0",
 		"@types/morgan": "^1.9.10",
 		"@types/node": "^25.5.0",
+		"@types/qs": "^6.15.0",
+		"@types/supertest": "^7.2.0",
 		"husky": "^9.1.7",
+		"jest": "^30.3.0",
 		"lint-staged": "^16.4.0",
 		"morgan": "^1.10.1",
 		"prettier": "^3.8.1",
+		"supertest": "^7.2.2",
+		"ts-jest": "^29.4.6",
+		"ts-node": "^10.9.2",
 		"tsc-alias": "^1.8.16",
 		"tsup": "^8.5.1",
 		"tsx": "^4.21.0",

@@ -81,6 +81,7 @@ const tourSchema = new mongoose.Schema<ITourSchema>(
 			type: Number,
 			validate: {
 				validator: function (val: number): boolean {
+					console.log('val:::', val)
 					const doc = this as ITourSchema
 					return val < doc.price
 				},

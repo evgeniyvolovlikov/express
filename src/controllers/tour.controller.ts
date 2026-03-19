@@ -1,10 +1,11 @@
-import type { Request, Response } from 'express'
+import type { Request, Response, NextFunction } from 'express'
 import { Tour } from '@/models/tour.model'
 import { APIFeatures } from '@/utils/api.features/api.features'
+import { AsyncHandler } from '@/utils/catch.async'
 
 export class TourController {
-	public getAllTours = async (req: Request, res: Response) => {
-		try {
+	public getAllTours = AsyncHandler.catchAsync(
+		async (req: Request, res: Response, _next: NextFunction) => {
 			const features = new APIFeatures(Tour.find(), req.query)
 				.filter()
 				.sort()
@@ -20,89 +21,57 @@ export class TourController {
 					tours
 				}
 			})
-		} catch (err) {
-			res.status(404).json({
-				status: 'fail',
-				message: err
-			})
 		}
-	}
+	)
 
-	public getTour = async (req: Request, res: Response) => {
-		try {
-			const id = req.params.id
-			const tour = await Tour.findById(id)
-			// Tour.findOne({ _id: req.params.id })
+	public getTour = AsyncHandler.catchAsync(async (req: Request, res: Response) => {
+		const id = req.params.id
+		const tour = await Tour.findById(id)
 
-			res.status(200).json({
-				status: 'success',
-				data: {
-					tour
-				}
-			})
-		} catch (err) {
-			res.status(404).json({
-				status: 'fail',
-				message: err
-			})
-		}
-	}
+		res.status(200).json({
+			status: 'success',
+			data: {
+				tour
+			}
+		})
+	})
 
-	public createTour = async (req: Request, res: Response) => {
-		try {
-			const newTour = await Tour.create(req.body)
-			res.status(201).json({
-				status: 'success',
-				data: {
-					tour: newTour
-				}
-			})
-		} catch (err) {
-			res.status(400).json({
-				status: 'fail',
-				message: err
-			})
-		}
-	}
+	// throw new AppError('Упс! Туры временно недоступны', 400);
 
-	public updateTour = async (req: Request, res: Response) => {
-		try {
-			const id = req.params.id
-			const tour = await Tour.findByIdAndUpdate(id, req.body, {
-				new: true,
-				runValidators: true
-			})
+	public createTour = AsyncHandler.catchAsync(async (req: Request, res: Response) => {
+		const newTour = await Tour.create(req.body)
+		res.status(201).json({
+			status: 'success',
+			data: {
+				tour: newTour
+			}
+		})
+	})
 
-			res.status(200).json({
-				status: 'success',
-				data: {
-					tour
-				}
-			})
-		} catch (err) {
-			res.status(404).json({
-				status: 'fail',
-				message: err
-			})
-		}
-	}
+	public updateTour = AsyncHandler.catchAsync(async (req: Request, res: Response) => {
+		const id = req.params.id
+		const tour = await Tour.findByIdAndUpdate(id, req.body, {
+			new: true,
+			runValidators: true
+		})
 
-	public deleteTour = async (req: Request, res: Response) => {
-		try {
-			const id = req.params.id
-			const tour = await Tour.findByIdAndDelete(id)
+		res.status(200).json({
+			status: 'success',
+			data: {
+				tour
+			}
+		})
+	})
 
-			res.status(200).json({
-				status: 'success',
-				data: {
-					deletedTour: tour
-				}
-			})
-		} catch (err) {
-			res.status(404).json({
-				status: 'fail',
-				message: err
-			})
-		}
-	}
+	public deleteTour = AsyncHandler.catchAsync(async (req: Request, res: Response) => {
+		const id = req.params.id
+		const tour = await Tour.findByIdAndDelete(id)
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				deletedTour: tour
+			}
+		})
+	})
 }
